@@ -43,7 +43,7 @@ var players = {
 
 $(document).ready(function() {
 
-    var yourCharacter;
+    var attacker;
     var defender;
 
     // render the players
@@ -51,16 +51,16 @@ $(document).ready(function() {
         var playerDiv = $("<div>").addClass("character").attr("id", id);
         var playerName = $("<p>").text(player.name);
         var playerImage = $("<img>").attr("src", "assets/images/" + player.image);
-        var playerHealthPoints = $("<p>").addClass("hp").text(player.healthPoints);
+        var playerHealthPoints = $("<p>").attr("id", id + "Hp").text(player.healthPoints);
         playerDiv.append(playerName).append(playerImage).append(playerHealthPoints);
         $("#enemies").append(playerDiv);
-    })
+    });
 
     // select attacker and defender
     $(".character").on("click", function() {
         if (!$("#you").html().trim()) {
             $("#you").append($("#" + this.id));
-            yourCharacter = this.id;
+            attacker = this.id;
             $("#youText").text("YOUR CHARACTER");
             $("#enemiesText").text("ENEMIES TO ATTACK");
         } else {
@@ -74,14 +74,16 @@ $(document).ready(function() {
 
     // attack
     $("<button>").addClass("attackButton").html("ATTACK").appendTo("#defender").click(function() {
-        var attackDamage = players[yourCharacter].attackPower;
+        var attackDamage = players[attacker].attackPower;
         var counterAttackDamage = players[defender].counterAttackPower;
         players[defender].healthPoints -= attackDamage;
-        players[yourCharacter].healthPoints -= counterAttackDamage;
-        $("div." + defender + " > p.hp").text(players[defender].healthPoints);
-        $("div." + yourCharacter + " > p.hp").text(players[yourCharacter].healthPoints);
+        players[attacker].healthPoints -= counterAttackDamage;
+        $("#" + defender + "Hp").text(players[defender].healthPoints);
+        $("#" + attacker + "Hp").text(players[attacker].healthPoints);
+
+
         console.log("new defender healthpoints = " + players[defender].healthPoints);
-        console.log("new yourCharacter healthpoints = " + players[yourCharacter].healthPoints);
+        console.log("new attacker healthpoints = " + players[attacker].healthPoints);
 
 
         $("#attack").html("You attacked " + players[defender].name + " for " + attackDamage + " damage.");
