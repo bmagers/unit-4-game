@@ -24,15 +24,15 @@ h2 {
 
 p {
     font-family: "Saira Semi Condensed", sans-serif;
-    font-size: 19px;
+    font-size: 20px;
     line-height: 1.3;
 }
 
-.characterArea {
+.playerArea {
     height: 200px;
 }
 
-.character {
+.player {
     float: left;
     margin: 5px 5px 5px 0;
     background-color: yellow;
@@ -41,11 +41,11 @@ p {
     width: 160px;
 }
 
-#you .character {
+#attacker .player {
     background-color: white;
 }
 
-#defender .character {
+#defender .player {
     background-color: brown;
     color: pink;
 }

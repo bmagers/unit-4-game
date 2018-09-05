@@ -1,39 +1,31 @@
 var players = {
     player1: {
         name: "Darth Vader",
-        id: "player1",
+        attackPower: 25,
+        basePower: 25,
         healthPoints: 180,
-        attackPower: 15,
-        basePower: 15,
-        image: "Darth-Vader.png",
-        role: "enemies"
+        image: "Darth-Vader.png"
     },
     player2: {
         name: "Luke Skywalker",
-        id: "player2",
+        attackPower: 20,
+        basePower: 20,
         healthPoints: 160,
-        attackPower: 12,
-        basePower: 12,
-        image: "Luke-Skywalker.png",
-        role: "enemies"
+        image: "Luke-Skywalker.png"
     },
     player3: {
         name: "Obi-Wan Kenobi",
-        id: "player3",
-        healthPoints: 130,
         attackPower: 8,
         basePower: 8,
-        image: "Obi-Wan-Kenobi.png",
-        role: "enemies"
+        healthPoints: 130,
+        image: "Obi-Wan-Kenobi.png"
     },
     player4: {
         name: "Yoda",
-        id: "player4",
-        healthPoints: 120,
         attackPower: 5,
         basePower: 5,
-        image: "Yoda.png",
-        role: "enemies"
+        healthPoints: 120,
+        image: "Yoda.png"
     }
 }
 
@@ -44,7 +36,7 @@ $(document).ready(function() {
 
     // render the players
     $.each(players, function(id, player) {
-        var playerDiv = $("<div>").addClass("character").attr("id", id);
+        var playerDiv = $("<div>").addClass("player").attr("id", id);
         var playerName = $("<p>").text(player.name);
         var playerImage = $("<img>").attr("src", "assets/images/" + player.image);
         var playerHealthPoints = $("<p>").attr("id", id + "Hp").text(player.healthPoints);
@@ -54,18 +46,18 @@ $(document).ready(function() {
 
     // select attacker and defender
     function selectPlayers() {
-        $(".character").on("click", function() {
+        $(".player").on("click", function() {
             if (this.id !== attacker) {
-                if (!$("#you").html().trim()) {
-                    $("#you").append($("#" + this.id));
+                if (!$("#attacker").html().trim()) {
                     attacker = this.id;
-                    $("#youText").text("YOUR CHARACTER");
+                    $("#attacker").append($("#" + attacker));
+                    $("#attackerText").text("YOUR CHARACTER");
                     $("#enemiesText").text("ENEMIES TO ATTACK");
                 } else {
-                    $("#defender").append($("#" + this.id));
-                    $(".character").off("click");
                     defender = this.id;
+                    $("#defender").append($("#" + defender));
                     $("#defenderText").text("DEFENDER");
+                    $(".player").off("click");
                     $(".attackButton").css("visibility", "visible");
                 }
             }
@@ -86,13 +78,17 @@ $(document).ready(function() {
         $("#counterAttack").text(players[defender].name + " attacked you back for " + counterAttackDamage + " damage.");
         players[attacker].attackPower += players[attacker].basePower;
         if (players[attacker].healthPoints <= 0) {
-            // you are dead
-            $("#gameOver").text("You are dead. Game over.");
+            // attacker is dead
+            $("#attackButton").css("visibility", "hidden");
+            $("#" + attacker).fadeOut(4000, function() {
+                $("#attack").text("You are dead.");
+                $("#counterAttack").text("Game over.");
+            });
         }
         if (players[defender].healthPoints <= 0) {
-            // he is dead
+            // defender is dead
             $("#attackButton").css("visibility", "hidden");
-            $("#" + defender).fadeOut(5000, function() {
+            $("#" + defender).fadeOut(4000, function() {
                 $("#attack").text(players[defender].name + " is dead.");
                 if ($("#enemies").html().trim()) {
                     $("#counterAttack").text("Select another enemy.");
